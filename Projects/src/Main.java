@@ -11,6 +11,14 @@ class Student {
         this.marks = marks;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setMarks(int marks) {
+        this.marks = marks;
+    }
+
     public int getMarks() {
         return marks;
     }
@@ -134,17 +142,45 @@ public class Main {
     }
 
     static void search(ArrayList<Student> students) {
-        System.out.print("Enter the id of the student: ");
-        int ids = getValidInt();
+        System.out.println("Search by: 1. ID  2. Name");
+        int choice = getValidInt();
+
         boolean found = false;
-        for (Student s : students) {
-            if (s.id == ids) {
-                System.out.println("Student found! Name: " + s.name + ", Marks: " + s.marks);
-                found = true;
-                break;
+
+        if (choice == 1) {
+            System.out.print("Enter ID: ");
+            int id = getValidInt();
+
+            for (Student s : students) {
+                if (s.id == id) {
+                    printStudent(s);
+                    found = true;
+                    break;
+                }
+            }
+        } else if (choice == 2) {
+            System.out.print("Enter Name: ");
+            String name = sc.nextLine();
+
+            for (Student s : students) {
+                if (s.name.equalsIgnoreCase(name)) {
+                    printStudent(s);
+                    found = true;
+                }
             }
         }
-        if (!found) System.out.println("No such student found.");
+
+        if (!found) {
+            System.out.println("No matching student found.");
+        }
+    }
+
+    static void printStudent(Student s) {
+        System.out.println(
+                "ID: " + s.id +
+                        " | Name: " + s.name +
+                        " | Marks: " + s.marks
+        );
     }
 
     static void update(ArrayList<Student> students) {
@@ -154,9 +190,9 @@ public class Main {
         for (Student s : students) {
             if (s.id == id) {
                 System.out.print("Enter new name: ");
-                s.name = sc.nextLine();
+                s.setName(sc.nextLine());
                 System.out.print("Enter new marks: ");
-                s.marks = getValidInt();
+                s.setMarks(getValidInt());
                 System.out.println("Student Details Updated Successfully");
                 found = true;
                 break;
@@ -196,9 +232,21 @@ public class Main {
     static void displayCondition(ArrayList<Student> students) {
         System.out.print("Enter the threshold marks: ");
         int threshold = getValidInt();
-        System.out.println("Students above " + threshold + ":");
+        System.out.println();
+
+        boolean found = false;
+
+        System.out.println("Student's/Student above Threshold Mark are/is: ");
+
         for (Student s : students) {
-            if (s.marks > threshold) System.out.println("ID: " + s.id + " | Name: " + s.name + " | Marks: " + s.marks);
+            if (s.marks > threshold) {
+                printStudent(s);
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("No students found above threshold.");
         }
     }
 }
