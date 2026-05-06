@@ -15,8 +15,9 @@ class Student {
         this.name = name;
     }
 
-    public void setMarks(int marks) {
+    public int setMarks(int marks) {
         this.marks = marks;
+        return marks;
     }
 
     public int getMarks() {
@@ -113,8 +114,13 @@ public class Main {
             String name = sc.nextLine();
             System.out.print("Enter marks: ");
             int marks = getValidInt();
-            students.add(new Student(id, name, marks));
-            System.out.println("Student added successfully!");
+            if(validateMarks(marks)){
+                students.add(new Student(id, name, marks));
+                System.out.println("Student added successfully!");
+            }
+            else {
+                System.out.println("Invalid marks! Enter between 0 and 100 (100 inclusive)");
+            }
         }
     }
 
@@ -163,7 +169,7 @@ public class Main {
             String name = sc.nextLine();
 
             for (Student s : students) {
-                if (s.name.equalsIgnoreCase(name)) {
+                if (s.name.toLowerCase().contains(name.toLowerCase())) {
                     printStudent(s);
                     found = true;
                 }
@@ -192,10 +198,11 @@ public class Main {
                 System.out.print("Enter new name: ");
                 s.setName(sc.nextLine());
                 System.out.print("Enter new marks: ");
-                s.setMarks(getValidInt());
-                System.out.println("Student Details Updated Successfully");
-                found = true;
-                break;
+                if(validateMarks( s.setMarks(getValidInt()))) {
+                    System.out.println("Student Details Updated Successfully");
+                    found = true;
+                    break;
+                }
             }
         }
         if (!found) System.out.println("No Such Student Exists");
@@ -248,5 +255,12 @@ public class Main {
         if (!found) {
             System.out.println("No students found above threshold.");
         }
+    }
+
+    static boolean validateMarks(int marks){
+        if(marks>0 && marks<=100){
+            return true;
+        }
+        return false;
     }
 }
